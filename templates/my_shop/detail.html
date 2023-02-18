@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="../../static/style/base.css">
+    <div class="product-detail">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}
+
+        {% endif %}" height="250" width="250">
+{#        <h1 class="text-right">{{ object.name }}</h1>#}
+        <h2>
+            <a href="{{ product.get_absolute_url }}">{{ object.name }}</a>
+
+        </h2>
+        <p class="price">${{ object.get_display_price }}</p>
+        <div class="form-group">
+            <button class="btn btn-primary" id="buy-button" data-id="{{ object.id }}">Купить</button>
+        </div>
+        {{ object.description|linebreaks }}
+    </div>
+    <script>
+  const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+  let checkoutButton = document.getElementById("buy-button");
+  checkoutButton.addEventListener("click", function () {
+    fetch("{% url 'my_shop:buy' object.id %}", {
+      method: "GET",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (session) {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(function (result) {
+        if (result.error) {
+          console.log(result.error.message);
+        }
+      })
+      .catch(function (error) {
+        console.error("Ошибка:", error);
+      });
+  });
+</script>
+
+{% endblock content%}
