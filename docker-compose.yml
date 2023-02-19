@@ -1,0 +1,36 @@
+
+version: '3.9'
+services:
+  nginx:
+    container_name: strip_project_1_nginx
+    restart: on-failure
+    image: nginx:1.19.8
+    volumes:
+      - ./nginx/dev/nginx.conf:/etc/nginx/conf.d
+      - static_volume:/code/static
+    ports:
+      - 80:80
+    depends_on:
+      - strip_project_1
+  strip_project_1:
+    container_name: strip_project_1
+    image: strip_project_1
+    build: .
+    restart: always
+    env_file: dev.env
+    command: sh -c "gunicorn --bind 0.0.0.0:5000 djangoStrip_project.wsgi"
+    volumes:
+     - .:/code
+     - static_volume:/code/static
+    depends_on:
+     - db
+  db:
+    container_name: db
+    image: postgres:12.0-alpine
+    env_file: dev.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  static_volume:
+  postgres_data:

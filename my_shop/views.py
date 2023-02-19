@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
-from my_shop.models import Product
+from .models import Product
 
 # Create your views here.
 

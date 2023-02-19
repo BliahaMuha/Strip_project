@@ -23,13 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    'SECRET_KEY', 'django-insecure-rlt!#-=r5s$w-l=9@uy8^t6h&@l)s9xalm^m#&*9m#9#z*)_7m')
+
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -83,11 +84,11 @@ WSGI_APPLICATION = 'djangoStrip_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'shop',
-        'USER': 'postgres',
-        'PASSWORD': '1401',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USERNAME'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT')
     }
 }
 
@@ -127,7 +128,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = 'static'
+MEDIA_ROOT = 'media'
 MEDIA_URL = 'media/'
 
 
@@ -143,7 +145,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-STRIPE_PUBLIC_KEY = 'pk_test_51Mbq1PGiMVqUDBjPsTeDLztxf3uPNZq0oIHCU9Mhir1aWNeitCwQZmUvMSVyuictVESYnQWloloSZi1buZatfwq100abEJRfI7'
-STRIPE_SECRET_KEY = 'sk_test_51Mbq1PGiMVqUDBjPGL783xPTaD9wJuVVsBrQCOiBhtt5qSI7VzTty5VBVcSPS2ZkCJIkBesfc8yh0fhzmqBe8qLq00WOH1GzHp'
+STRIPE_PUBLIC_KEY = 'pk_test_51Md7l8BBwQVcEL6MoQ66HvW3GRD9n0s1cNo2S86kJp1BArsPHkFNMTYCQoedtX3fAYQ1V5UsmuviRakArN8hsxSn00W1wHGWoh'
+STRIPE_SECRET_KEY = 'sk_test_51Md7l8BBwQVcEL6MGnRNS8sYi8lM1rzZ4Lcpe0PUYyK9A0zosPcTOavQiH0YIYswjoXNAjQD1nQ13TZG0jDbwT7K006hWzrc3s'
 
 DOMAIN = f'http://{ALLOWED_HOSTS[-1]}'
