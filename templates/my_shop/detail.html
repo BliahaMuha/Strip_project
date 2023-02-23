@@ -4,7 +4,7 @@
 {% block content %}
     <link rel="stylesheet" href="../../static/style/base.css">
     <div class="product-detail">
-        <img src="{% if product.image %}{{ product.image.url }}{% else %}
+        <img src="{% if object.image %}{{ object.image.url }}{% else %}
 
         {% endif %}" height="250" width="250">
 {#        <h1 class="text-right">{{ object.name }}</h1>#}
